@@ -1,7 +1,7 @@
 name: load_images
 on: [push]
 jobs:
-  BMI:
+  LoadImages:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
