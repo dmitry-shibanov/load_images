@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:load_images/models/ImageClient.dart';
 import 'package:load_images/models/ImageModel.dart';
-import 'package:http/http.dart' show get;
 import 'dart:convert';
 
 void main() => runApp(MyApp());
@@ -30,12 +30,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int counter = 0;
   List<ImageLoader> _list = [];
+  ImageClient imageClient;
+
+  _MyHomePageState(){
+    imageClient = ImageClient();
+  }
 
   void fetchImage() async {
     counter++;
-    var parsed_json = await get(
-        "https://jsonplaceholder.typicode.com/photos/${counter.toString()}");
-    print(parsed_json.toString());
+    var parsed_json = await imageClient.getImage(counter);
+    print(parsed_json.body);
     var decodedJson = json.decode(parsed_json.body);
     ImageLoader loader = new ImageLoader.fromJson(decodedJson);
     setState(() {
@@ -59,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        key: Key("fab"),
         onPressed: fetchImage,
         tooltip: 'Increment',
         child: Icon(Icons.add),
